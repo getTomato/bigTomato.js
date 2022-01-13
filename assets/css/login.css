@@ -12,6 +12,7 @@ body {
   width: 400px;
   height: 310px;
   background-color: #fff;
+  border-radius: 30px;
   position: absolute;
   left: 50%;
   top: 50%;

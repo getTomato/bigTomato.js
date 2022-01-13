@@ -74,8 +74,9 @@
 // })
 
 
-// 点击切换注册登录界面
+
 $(function(){
+  // 点击切换注册登录界面
   $('#link_reg').on('click',function(){
     $('.login-box').toggle()
     $('.reg-box').toggle()
@@ -84,4 +85,52 @@ $(function(){
     $('.reg-box').toggle()
     $('.login-box').toggle()
   })
+  // 验证密码
+  let form = layui.form 
+  let layer = layui.layer 
+  form.verify({
+    pwd: [/^\S{6,12}$/,'密码必须6到12位，且不能出现空格'],
+    repwd: function(value){
+      let val = $('.reg-box [name=password]').val()
+      if(val !== value) {
+        return '两次密码不一致！'
+      }
+    }
+  })
+  // 注册
+  $('#form_reg').on('submit',function(e) {
+    e.preventDefault()
+    let data = {
+            username: $('#form_reg [name=username]').val(),
+            password: $('#form_reg [name=password]').val()
+          }
+    $.post('/api/reguser',data,function(res){
+      if( res.status !== 0) {
+        return layer.msg(res.message, {icon: 5}); 
+      }
+      layer.msg('注册成功，请登录！', {icon: 6});
+      $('#link_login').click()
+    })
+   
+  })
+  $('#form_login').submit(function(e){
+    e.preventDefault()
+    $.ajax({
+      method: 'post',
+      url: '/api/login',
+      data: $(this).serialize(),
+      success: function(res){
+        if(res.status !== 0) {
+          return layer.msg(res.message, {icon: 5})
+        }
+      layer.msg('登陆成功', {icon: 6});
+      localStorage.setItem('token',res.token)
+      location.href = '/index.html'
+      }
+    })
+  })
+
+
 })
+
+
