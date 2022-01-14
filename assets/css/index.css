@@ -2,6 +2,9 @@
   text-align: center;
   font-size: 12px;
 }
+body {
+  overflow: hidden;
+}
 
 .iconfont {
   margin-right: 8px;
